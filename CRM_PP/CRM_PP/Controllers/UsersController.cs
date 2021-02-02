@@ -22,6 +22,7 @@ namespace CRM_PP.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
+            // Dajemy do view tylko te co mają isDeleted 0
             var result = await _context.User.Where(u => u.isDeleted == 0).ToListAsync();
             return View(result);
         }
@@ -55,7 +56,7 @@ namespace CRM_PP.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,dateOfBirth,login,passwordMd5,idRoli,isDeleted")] User user)
+        public async Task<IActionResult> Create([Bind("id,name,surname,dateOfBirth,login,passwordMd5,idRoli,isDeleted")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -114,7 +115,7 @@ namespace CRM_PP.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View();
         }
 
         // GET: Users/Delete/5

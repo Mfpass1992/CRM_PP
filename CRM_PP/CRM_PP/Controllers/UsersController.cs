@@ -22,7 +22,8 @@ namespace CRM_PP.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.ToListAsync());
+            var result = await _context.User.Where(u => u.isDeleted == 0).ToListAsync();
+            return View(result);
         }
 
         // GET: Users/Details/5
@@ -86,7 +87,7 @@ namespace CRM_PP.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,dateOfBirth,login,passwordMd5,idRoli,isDeleted")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("id,surname,name,dateOfBirth,login,passwordMd5,idRoli,isDeleted")] User user)
         {
             if (id != user.id)
             {

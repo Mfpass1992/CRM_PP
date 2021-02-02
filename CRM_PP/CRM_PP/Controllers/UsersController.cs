@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CRM_PP.Data;
 using CRM_PP.Models;
+using PagedList;
+using PagedList.Mvc;
 
 namespace CRM_PP.Controllers
 {
@@ -20,11 +22,14 @@ namespace CRM_PP.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public ActionResult Index(int? page)
         {
-            // Dajemy do view tylko te co mają isDeleted 0
-            var result = await _context.User.Where(u => u.isDeleted == 0).ToListAsync();
-            return View(result);
+            IPagedList<User> lista = null;
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+
+            lista = _context.User.Where(u => u.isDeleted == 0).ToPagedList(pageNumber, pageSize);
+            return View(lista);
         }
 
         // GET: Users/Details/5
@@ -115,7 +120,7 @@ namespace CRM_PP.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View();
+            return View(user);
         }
 
         // GET: Users/Delete/5
